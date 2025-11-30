@@ -1,61 +1,111 @@
 import os
-from dataclasses import dataclass
 from pathlib import Path
 
-# Carregar variáveis de ambiente do .env
+# Carregar variáveis de ambiente do .env (para desenvolvimento local)
 try:
     from dotenv import load_dotenv
-    # Procurar .env na raiz do projeto
     env_path = Path(__file__).parent.parent / ".env"
     load_dotenv(env_path)
 except ImportError:
-    pass  # python-dotenv não instalado
+    pass
 
-# Função para obter secrets (Streamlit Cloud ou env vars)
-def get_secret(key: str, default: str = "") -> str:
-    """Obtém secret do Streamlit Cloud ou variáveis de ambiente"""
-    # Tentar Streamlit secrets primeiro
-    try:
-        import streamlit as st
-        if hasattr(st, 'secrets') and key in st.secrets:
-            return st.secrets[key]
-    except:
-        pass
-    # Fallback para variáveis de ambiente
-    return os.getenv(key, default)
-
-@dataclass
 class Settings:
-    # API Keys
-    OPENROUTER_API_KEY: str = get_secret("OPENROUTER_API_KEY", "")
-    GOOGLE_API_KEY: str = get_secret("GOOGLE_API_KEY", "")
-    MISTRAL_API_KEY: str = get_secret("MISTRAL_API_KEY", "")
-    HUGGINGFACE_API_KEY: str = get_secret("HUGGINGFACE_API_KEY", "")
-    TOGETHER_API_KEY: str = get_secret("TOGETHER_API_KEY", "")
+    """
+    Configurações com suporte a Streamlit Secrets e variáveis de ambiente.
+    Os secrets são lidos dinamicamente (não no import time).
+    """
     
-    # VLM (Vision Language Model) - Análise de Imagens
-    VLM_MODEL: str = get_secret("VLM_MODEL", "gemini-2.5-flash")
-    VLM_BACKUP: str = get_secret("VLM_BACKUP", "qwen/qwen2.5-vl-72b-instruct:free")
-    VLM_BACKUP_2: str = get_secret("VLM_BACKUP_2", "mistralai/pixtral-12b:free")
-    VLM_BACKUP_3: str = get_secret("VLM_BACKUP_3", "gemini-2.5-flash-lite")
+    @staticmethod
+    def _get(key: str, default: str = "") -> str:
+        """Obtém valor do Streamlit secrets ou env vars"""
+        # 1. Tentar Streamlit secrets
+        try:
+            import streamlit as st
+            if hasattr(st, 'secrets') and key in st.secrets:
+                return str(st.secrets[key])
+        except Exception:
+            pass
+        
+        # 2. Fallback para variáveis de ambiente
+        return os.getenv(key, default)
     
-    # LLM (Large Language Model) - Raciocínio Clínico
-    LLM_MODEL: str = get_secret("LLM_MODEL", "gemini-2.5-pro")
-    LLM_BACKUP: str = get_secret("LLM_BACKUP", "mistral-small-latest")
+    # === API Keys (propriedades dinâmicas) ===
+    @property
+    def GOOGLE_API_KEY(self) -> str:
+        return self._get("GOOGLE_API_KEY", "")
     
-    # OpenRouter Free Models (Novembro 2025)
-    LLM_OPENROUTER_1: str = get_secret("LLM_OPENROUTER_1", "x-ai/grok-4.1-fast:free")
-    LLM_OPENROUTER_2: str = get_secret("LLM_OPENROUTER_2", "tngtech/deepseek-r1t-chimera:free")
-    LLM_OPENROUTER_3: str = get_secret("LLM_OPENROUTER_3", "google/gemma-3-27b-it:free")
-    LLM_OPENROUTER_4: str = get_secret("LLM_OPENROUTER_4", "z-ai/glm-4.5-air:free")
+    @property
+    def OPENROUTER_API_KEY(self) -> str:
+        return self._get("OPENROUTER_API_KEY", "")
     
-    # Embeddings (Pesquisa Semântica) - HuggingFace local
-    EMBEDDING_MODEL: str = get_secret("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-    # Google embeddings (requer API diferente)
-    GOOGLE_EMBEDDING_MODEL: str = get_secret("GOOGLE_EMBEDDING_MODEL", "text-embedding-004")
+    @property
+    def MISTRAL_API_KEY(self) -> str:
+        return self._get("MISTRAL_API_KEY", "")
     
-    # Paths
-    CHROMA_PATH: str = get_secret("CHROMA_PATH", "./knowledge_base/chroma_db")
-    DOCS_PATH: str = get_secret("DOCS_PATH", "./knowledge_base/documents")
+    @property
+    def HUGGINGFACE_API_KEY(self) -> str:
+        return self._get("HUGGINGFACE_API_KEY", "")
+    
+    @property
+    def TOGETHER_API_KEY(self) -> str:
+        return self._get("TOGETHER_API_KEY", "")
+    
+    # === VLM Models ===
+    @property
+    def VLM_MODEL(self) -> str:
+        return self._get("VLM_MODEL", "gemini-2.5-flash")
+    
+    @property
+    def VLM_BACKUP(self) -> str:
+        return self._get("VLM_BACKUP", "gemini-2.5-flash-lite")
+    
+    @property
+    def VLM_BACKUP_2(self) -> str:
+        return self._get("VLM_BACKUP_2", "pixtral-12b-2409")
+    
+    # === LLM Models ===
+    @property
+    def LLM_MODEL(self) -> str:
+        return self._get("LLM_MODEL", "gemini-2.5-pro")
+    
+    @property
+    def LLM_BACKUP(self) -> str:
+        return self._get("LLM_BACKUP", "mistral-small-latest")
+    
+    @property
+    def LLM_OPENROUTER_1(self) -> str:
+        return self._get("LLM_OPENROUTER_1", "x-ai/grok-4.1-fast:free")
+    
+    @property
+    def LLM_OPENROUTER_2(self) -> str:
+        return self._get("LLM_OPENROUTER_2", "tngtech/deepseek-r1t-chimera:free")
+    
+    @property
+    def LLM_OPENROUTER_3(self) -> str:
+        return self._get("LLM_OPENROUTER_3", "google/gemma-3-27b-it:free")
+    
+    @property
+    def LLM_OPENROUTER_4(self) -> str:
+        return self._get("LLM_OPENROUTER_4", "z-ai/glm-4.5-air:free")
+    
+    # === Embeddings ===
+    @property
+    def EMBEDDING_MODEL(self) -> str:
+        return self._get("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+    
+    @property
+    def GOOGLE_EMBEDDING_MODEL(self) -> str:
+        return self._get("GOOGLE_EMBEDDING_MODEL", "text-embedding-004")
+    
+    # === Paths ===
+    @property
+    def CHROMA_PATH(self) -> str:
+        return self._get("CHROMA_PATH", "./knowledge_base/chroma_db")
+    
+    @property
+    def DOCS_PATH(self) -> str:
+        return self._get("DOCS_PATH", "./knowledge_base/documents")
 
+
+# Instância global
 settings = Settings()
