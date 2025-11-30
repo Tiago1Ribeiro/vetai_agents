@@ -1,31 +1,31 @@
-﻿#  Vet Agents
+# 🐾 Vet Agents
 
 Sistema multi-agente de apoio ao diagnóstico veterinário com IA generativa.
 
-** Demo: [vetai-agents.streamlit.app](https://vetai-agents.streamlit.app)**
+**🔗 Demo: [vetai-agents.streamlit.app](https://vetai-agents.streamlit.app)**
 
-##  O que é
+## 🎯 O que é
 
 Ferramenta de IA para apoio a médicos veterinários na análise de casos clínicos. Combina análise de imagem, pesquisa web e geração de diagnósticos diferenciais usando modelos de linguagem.
 
-##  Arquitetura
+## 🏗️ Arquitetura
 
-`
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      Streamlit UI                           │
+├─────────────────────────────────────────────────────────────┤
+│                    Orchestrator Agent                       │
+│         (coordena o fluxo entre os agentes)                 │
+├──────────────┬──────────────┬──────────────┬───────────────┤
+│ Vision Agent │ Knowledge    │  Web Search  │ Diagnosis     │
+│ (imagens)    │ Agent (RAG)  │  Tool        │ Agent (LLM)   │
+├──────────────┼──────────────┼──────────────┼───────────────┤
+│ Gemini 2.5   │ ChromaDB +   │ DuckDuckGo   │ DeepSeek R1   │
+│ Flash        │ MiniLM-L6    │ (ddgs)       │ Chimera       │
+└──────────────┴──────────────┴──────────────┴───────────────┘
+```
 
-                      Streamlit UI                           
-
-                    Orchestrator Agent                       
-         (coordena o fluxo entre os agentes)                 
-
- Vision Agent  Knowledge      Web Search   Diagnosis     
- (imagens)     Agent (RAG)    Tool         Agent (LLM)   
-
- Gemini 2.5    ChromaDB +    DuckDuckGo    DeepSeek R1   
- Flash         MiniLM-L6     (ddgs)        Chimera       
-
-`
-
-##  Modelos (100% Gratuitos)
+## 🤖 Modelos (100% Gratuitos)
 
 ### Visão (Análise de Imagens)
 | Modelo | Provider | Uso |
@@ -46,16 +46,16 @@ Ferramenta de IA para apoio a médicos veterinários na análise de casos clíni
 - **ChromaDB** - Vector store local
 - **all-MiniLM-L6-v2** - Embeddings (HuggingFace)
 
-##  Funcionalidades
+## ✨ Funcionalidades
 
--  **Upload de imagens** clínicas (lesões, radiografias, etc.)
--  **Análise visual** com Gemini Vision
--  **Pesquisa web** automática de literatura veterinária
--  **RAG** com base de conhecimento local
--  **Diagnóstico diferencial** estruturado
--  **100% gratuito** - usa apenas APIs free tier
+- 📷 **Upload de imagens** clínicas (lesões, radiografias, etc.)
+- 🔍 **Análise visual** com Gemini Vision
+- 🌐 **Pesquisa web** automática de literatura veterinária
+- 📚 **RAG** com base de conhecimento local
+- 🩺 **Diagnóstico diferencial** estruturado
+- ⚡ **100% gratuito** - usa apenas APIs free tier
 
-##  Deploy
+## 🚀 Deploy
 
 Deployed no **Streamlit Community Cloud**:
 1. Push para GitHub
@@ -65,15 +65,15 @@ Deployed no **Streamlit Community Cloud**:
 
 ### Secrets necessários
 
-`	oml
+```toml
 GOOGLE_API_KEY = "AIzaSy..."      # Google AI Studio
 OPENROUTER_API_KEY = "sk-or-..." # OpenRouter.ai
 MISTRAL_API_KEY = "..."          # Mistral (opcional)
-`
+```
 
-##  Executar Localmente
+## 🛠️ Executar Localmente
 
-`ash
+```bash
 # Clone
 git clone https://github.com/Tiago1Ribeiro/vetai_agents.git
 cd vetai_agents
@@ -89,30 +89,30 @@ cp .streamlit/secrets.toml.example .streamlit/secrets.toml
 
 # Run
 streamlit run app.py
-`
+```
 
-##  Estrutura
+## 📁 Estrutura
 
-`
- app.py                 # Interface Streamlit
- agents/
-    orchestrator.py    # Coordenador principal
-    vision_agent.py    # Análise de imagens
-    knowledge_agent.py # RAG + Web search
-    diagnosis_agent.py # Geração de diagnóstico
- tools/
-    web_search.py      # RAG tool
-    web_search_tool.py # DuckDuckGo search
- config/
-    settings.py        # Configurações e secrets
- requirements.txt
-`
+```
+├── app.py                 # Interface Streamlit
+├── agents/
+│   ├── orchestrator.py    # Coordenador principal
+│   ├── vision_agent.py    # Análise de imagens
+│   ├── knowledge_agent.py # RAG + Web search
+│   └── diagnosis_agent.py # Geração de diagnóstico
+├── tools/
+│   ├── web_search.py      # RAG tool
+│   └── web_search_tool.py # DuckDuckGo search
+├── config/
+│   └── settings.py        # Configurações e secrets
+└── requirements.txt
+```
 
-##  Aviso Importante
+## ⚠️ Aviso Importante
 
 > Este sistema é uma **ferramenta de apoio** e **NÃO substitui** a consulta presencial com um médico veterinário qualificado.
 
-##  Licença
+## 📄 Licença
 
 MIT
 
