@@ -284,18 +284,18 @@ TEXT_MODELS = {
 }
 
 ESPECIES = {
+    "Gato": {
+        "icon": "🐈",
+        "racas": ["SRD (Sem Raça Definida)", "Persa", "Siamês", "Maine Coon", 
+                  "Ragdoll", "British Shorthair", "Bengal", "Sphynx", 
+                  "Scottish Fold", "Abissínio", "Outra"]
+    },
     "Cão": {
         "icon": "🐕",
         "racas": ["SRD (Sem Raça Definida)", "Labrador Retriever", "Pastor Alemão", 
                   "Golden Retriever", "Bulldog Francês", "Poodle", "Beagle", 
                   "Rottweiler", "Yorkshire Terrier", "Boxer", "Husky Siberiano",
                   "Pitbull", "Border Collie", "Shih Tzu", "Dachshund", "Outra"]
-    },
-    "Gato": {
-        "icon": "🐈",
-        "racas": ["SRD (Sem Raça Definida)", "Persa", "Siamês", "Maine Coon", 
-                  "Ragdoll", "British Shorthair", "Bengal", "Sphynx", 
-                  "Scottish Fold", "Abissínio", "Outra"]
     },
     "Ave": {
         "icon": "🦜",
@@ -668,6 +668,7 @@ with col_form:
     # === BOTÃO DE ANÁLISE ===
     st.write("")  # Spacing
     btn_analisar = st.button("🔍 Analisar Caso", type="primary", use_container_width=True)
+    st.caption("⏱️ A análise pode demorar entre 20 a 90 segundos, dependendo da complexidade do caso.")
 
 
 # === COLUNA DIREITA: RESULTADOS ===
