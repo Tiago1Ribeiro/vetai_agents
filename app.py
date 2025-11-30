@@ -269,18 +269,18 @@ header {visibility: hidden;}
 
 # Modelos disponíveis para Visão (VLM)
 VISION_MODELS = {
-    "Gemini Flash (Google)": "gemini-2.5-flash",
-    "Gemini Flash Lite (Google)": "gemini-2.5-flash-lite",
+    "Gemini 2.5 Flash (Google)": "gemini-2.5-flash",
+    "Gemini 2.5 Flash Lite (Google)": "gemini-2.5-flash-lite",
     "Pixtral 12B (Mistral)": "pixtral-12b-2409",
 }
 
 # Modelos disponíveis para Texto/Diagnóstico (LLM)
 TEXT_MODELS = {
-    "Grok 4.1 Fast (xAI)": "x-ai/grok-4.1-fast:free",
-    "Gemma 3 27B (Google)": "google/gemma-3-27b-it:free",
-    "DeepSeek R1 Chimera": "tngtech/deepseek-r1t-chimera:free",
-    "GLM 4.5 Air": "z-ai/glm-4.5-air:free",
-    "Mistral Small": "mistral-small-latest",
+    "Grok 4.1 Fast (xAI) - Free": "x-ai/grok-4.1-fast:free",
+    "Gemma 3 27B (Google) - Free": "google/gemma-3-27b-it:free",
+    "DeepSeek R1 Chimera - Free": "tngtech/deepseek-r1t-chimera:free",
+    "GLM 4.5 Air (Zhipu) - Free": "z-ai/glm-4.5-air:free",
+    "Mistral Small (Mistral)": "mistral-small-latest",
 }
 
 ESPECIES = {
