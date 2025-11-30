@@ -276,9 +276,9 @@ VISION_MODELS = {
 
 # Modelos disponíveis para Texto/Diagnóstico (LLM)
 TEXT_MODELS = {
+    "DeepSeek R1 Chimera - Free": "tngtech/deepseek-r1t-chimera:free",
     "Grok 4.1 Fast (xAI) - Free": "x-ai/grok-4.1-fast:free",
     "Gemma 3 27B (Google) - Free": "google/gemma-3-27b-it:free",
-    "DeepSeek R1 Chimera - Free": "tngtech/deepseek-r1t-chimera:free",
     "GLM 4.5 Air (Zhipu) - Free": "z-ai/glm-4.5-air:free",
     "Mistral Small (Mistral)": "mistral-small-latest",
 }
