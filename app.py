@@ -485,6 +485,36 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ============================================================
+# DEBUG: VERIFICAR API KEYS (sidebar)
+# ============================================================
+with st.sidebar:
+    st.markdown("### 🔑 Estado das API Keys")
+    
+    # Google API Key
+    google_key = settings.GOOGLE_API_KEY
+    if google_key and len(google_key) > 10:
+        st.success(f"✅ Google: {google_key[:8]}...{google_key[-4:]}")
+    else:
+        st.error("❌ Google: NÃO CONFIGURADA")
+    
+    # OpenRouter API Key
+    openrouter_key = settings.OPENROUTER_API_KEY
+    if openrouter_key and len(openrouter_key) > 10:
+        st.success(f"✅ OpenRouter: {openrouter_key[:8]}...{openrouter_key[-4:]}")
+    else:
+        st.error("❌ OpenRouter: NÃO CONFIGURADA")
+    
+    # Mistral API Key
+    mistral_key = settings.MISTRAL_API_KEY
+    if mistral_key and len(mistral_key) > 10:
+        st.success(f"✅ Mistral: {mistral_key[:8]}...{mistral_key[-4:]}")
+    else:
+        st.warning("⚠️ Mistral: não configurada (opcional)")
+    
+    st.markdown("---")
+    st.caption("Expande a sidebar para ver o estado das chaves API")
+
+# ============================================================
 # LAYOUT PRINCIPAL
 # ============================================================
 

@@ -126,6 +126,14 @@ Sê conciso e objetivo."""
         # Usar modelo passado ou default
         vision_model = model or settings.VLM_MODEL
         
+        # Verificar API key
+        api_key = settings.GOOGLE_API_KEY
+        if not api_key:
+            return "Erro: GOOGLE_API_KEY não configurada. Configure nos Secrets do Streamlit Cloud."
+        
+        # Debug: mostrar primeiros caracteres da key (seguro)
+        print(f"      [Gemini] API Key presente: {api_key[:10]}...{api_key[-4:] if len(api_key) > 14 else ''}")
+        
         # Converter imagens para base64
         image_parts = []
         for img in images:
