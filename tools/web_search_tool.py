@@ -80,22 +80,29 @@ class WebSearchTool:
         query: str,
         max_results: int = 5
     ) -> list[WebSearchResult]:
-        """Pesquisa usando DuckDuckGo (gratuito)"""
+        """Pesquisa usando DuckDuckGo (gratuito) via pacote ddgs"""
         import warnings
         warnings.filterwarnings("ignore", message=".*duckduckgo.*")
         warnings.filterwarnings("ignore", message=".*ddgs.*")
         
         try:
-            from duckduckgo_search import DDGS
+            # Usar o novo pacote ddgs (mais estável)
+            try:
+                from ddgs import DDGS
+            except ImportError:
+                from duckduckgo_search import DDGS
             
-            # Enriquecer query com termos veterinários se não tiver
-            vet_terms = ['veterinary', 'veterinário', 'vet', 'animal', 'dog', 'cat', 'diagnosis', 'treatment']
+            # Enriquecer query com termos veterinários em inglês
+            vet_terms = ['veterinary', 'vet', 'animal', 'dog', 'cat', 'canine', 'feline', 'diagnosis', 'treatment']
             has_vet_term = any(term.lower() in query.lower() for term in vet_terms)
             if not has_vet_term:
-                query = f"veterinary {query} symptoms treatment"
+                search_query = f"veterinary {query} symptoms diagnosis treatment"
+            else:
+                search_query = query
             
-            with DDGS() as ddgs:
-                results = list(ddgs.text(query, max_results=max_results))
+            # Pesquisar (ddgs não usa context manager)
+            ddgs = DDGS()
+            results = list(ddgs.text(search_query, max_results=max_results))
             
             return [
                 WebSearchResult(
@@ -107,12 +114,12 @@ class WebSearchTool:
                 for r in results
             ]
         except ImportError as ie:
-            print(f"⚠️ duckduckgo_search não instalado: {ie}")
+            print(f"⚠️ ddgs/duckduckgo_search não instalado: {ie}")
             return []
         except Exception as e:
             print(f"⚠️ Erro DuckDuckGo: {e}")
             return []
-    
+
     def search_veterinary(
         self,
         query: str,
@@ -130,16 +137,14 @@ class WebSearchTool:
         Returns:
             Dict com resultados e análise opcional
         """
-        # Enriquecer query com contexto veterinário específico
-        # Adiciona termos para obter resultados mais relevantes
-        vet_query = f"{query} site:vetmed.edu OR site:avma.org OR site:vin.com OR veterinary medicine symptoms treatment"
+        # Query veterinária direta (sem operadores site: que não funcionam bem no DDG)
+        vet_query = f"veterinary {query} diagnosis treatment"
         
         results = self.search(vet_query, max_results)
         
-        # Se não houver resultados, tentar query mais simples
+        # Se não houver resultados, tentar query original
         if not results:
-            vet_query = f"veterinary {query}"
-            results = self.search(vet_query, max_results)
+            results = self.search(query, max_results)
         
         analysis = None
         if use_gemini_analysis and results and self.google_api_key:
